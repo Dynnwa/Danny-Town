@@ -1,0 +1,64 @@
+@import '@fontsource/patrick-hand';
+@import '@fontsource/caveat';
+
+:root {
+  --paper: #f7e1c8;
+  --paper-deep: #f2d8bb;
+  --ink: #2b1d12;
+  --ink-soft: rgba(43, 29, 18, 0.72);
+  --ink-muted: rgba(43, 29, 18, 0.62);
+  --font-hand: 'Patrick Hand', 'Trebuchet MS', sans-serif;
+  --font-script: 'Caveat', 'Brush Script MT', cursive;
+
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--font-hand);
+  font-size: 18px;
+  line-height: 1.4;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  min-width: 320px;
+  background: var(--paper);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-hand);
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  appearance: none;
+}
+
+#root {
+  min-height: 100svh;
+  height: 100%;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  :root {
+    font-size: 16px;
+  }
+}

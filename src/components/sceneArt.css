@@ -1,0 +1,240 @@
+.scene-art {
+  --scene-size: 64px;
+  --scene-tilt: 0deg;
+  --scene-scale-x: 1;
+  --scene-stroke: #18120f;
+  --scene-fill: rgba(255, 255, 255, 0.24);
+  --scene-shadow: rgba(24, 18, 15, 0.12);
+
+  display: inline-flex;
+  width: var(--scene-size);
+  height: auto;
+  color: var(--scene-stroke);
+  vertical-align: middle;
+  transform: rotate(var(--scene-tilt)) scaleX(var(--scene-scale-x));
+  transform-origin: center bottom;
+}
+
+.scene-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.scene-art path,
+.scene-art circle,
+.scene-art ellipse,
+.scene-art rect,
+.scene-art line {
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.scene-tree {
+  filter: drop-shadow(0 2px 0 var(--scene-shadow));
+}
+
+.scene-tree__canopy {
+  fill: var(--scene-fill);
+  stroke: currentColor;
+  stroke-width: 2.8;
+}
+
+.scene-tree__canopy-detail,
+.scene-tree__trunk,
+.scene-tree__ground {
+  fill: none;
+  stroke: currentColor;
+}
+
+.scene-tree__canopy-detail {
+  stroke-width: 2;
+  opacity: 0.7;
+}
+
+.scene-tree__trunk {
+  stroke-width: 2.8;
+}
+
+.scene-tree__ground {
+  stroke-width: 2.4;
+  opacity: 0.8;
+}
+
+.scene-house {
+  filter: drop-shadow(0 3px 0 var(--scene-shadow));
+  transition:
+    transform 160ms ease,
+    filter 160ms ease;
+}
+
+.scene-house[data-active='true'] {
+  transform: translateY(-4px) scale(1.02) scaleX(var(--scene-scale-x));
+  filter: drop-shadow(0 10px 12px rgba(24, 18, 15, 0.16));
+}
+
+.scene-house__outline,
+.scene-house__roof,
+.scene-house__ground,
+.scene-house__smoke {
+  fill: none;
+  stroke: currentColor;
+}
+
+.scene-house__outline {
+  stroke-width: 2.9;
+}
+
+.scene-house__roof,
+.scene-house__ground {
+  stroke-width: 3.2;
+}
+
+.scene-house__body-fill {
+  fill: rgba(255, 255, 255, 0.28);
+  stroke: currentColor;
+  stroke-width: 2.7;
+}
+
+.scene-house__smoke {
+  stroke-width: 2.1;
+  opacity: 0.8;
+  animation: scene-smoke 3.2s ease-in-out infinite;
+}
+
+.scene-character {
+  filter: drop-shadow(0 3px 0 rgba(24, 18, 15, 0.08));
+}
+
+.scene-character__shadow {
+  fill: rgba(24, 18, 15, 0.1);
+  stroke: none;
+}
+
+.scene-character__head {
+  fill: rgba(255, 255, 255, 0.22);
+  stroke: currentColor;
+  stroke-width: 2.8;
+}
+
+.scene-character__outline,
+.scene-character__dust path {
+  fill: none;
+  stroke: currentColor;
+}
+
+.scene-character__outline {
+  stroke-width: 2.8;
+}
+
+.scene-character__body {
+  transform-origin: center 60%;
+}
+
+.scene-character__arm,
+.scene-character__leg {
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+
+.scene-character__dust {
+  opacity: 0;
+}
+
+.scene-character__dust path {
+  stroke-width: 1.8;
+}
+
+.scene-character--idle .scene-character__body {
+  animation: scene-bob 2.8s ease-in-out infinite;
+}
+
+.scene-character--walking .scene-character__body {
+  animation: scene-bob 0.65s ease-in-out infinite alternate;
+}
+
+.scene-character--walking .scene-character__arm--left {
+  animation: scene-swing-left 0.55s ease-in-out infinite alternate;
+}
+
+.scene-character--walking .scene-character__arm--right {
+  animation: scene-swing-right 0.55s ease-in-out infinite alternate;
+}
+
+.scene-character--walking .scene-character__leg--left {
+  animation: scene-swing-right 0.55s ease-in-out infinite alternate;
+}
+
+.scene-character--walking .scene-character__leg--right {
+  animation: scene-swing-left 0.55s ease-in-out infinite alternate;
+}
+
+.scene-character--walking .scene-character__dust {
+  animation: scene-dust 0.55s ease-in-out infinite alternate;
+}
+
+.scene-character--up .scene-character__face {
+  opacity: 0.18;
+}
+
+.scene-character--left .scene-character__body,
+.scene-character--right .scene-character__body {
+  animation-duration: 0.45s;
+}
+
+@keyframes scene-smoke {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+
+  50% {
+    transform: translateY(-2px);
+    opacity: 0.92;
+  }
+}
+
+@keyframes scene-bob {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(2px);
+  }
+}
+
+@keyframes scene-swing-left {
+  0% {
+    transform: rotate(-10deg);
+  }
+
+  100% {
+    transform: rotate(10deg);
+  }
+}
+
+@keyframes scene-swing-right {
+  0% {
+    transform: rotate(10deg);
+  }
+
+  100% {
+    transform: rotate(-10deg);
+  }
+}
+
+@keyframes scene-dust {
+  0% {
+    opacity: 0.1;
+    transform: translateY(1px);
+  }
+
+  100% {
+    opacity: 0.6;
+    transform: translateY(-1px);
+  }
+}
