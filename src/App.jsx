@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+import { AboutPageContent, ExperiencePageContent } from './components/AboutExperiencePages'
+import { HouseInteriorLayout } from './components/HouseInteriorLayout'
+import { ContactShops, ResumePageContent } from './components/ResumeContactPages'
 import { HouseSketch, TreeSketch, WalkingStickman } from './components/SceneArt'
 import './App.css'
 
@@ -15,30 +18,41 @@ const HOUSE_DESTINATIONS = [
   {
     id: 'about',
     label: 'About',
+    title: 'Story Cottage',
+    tagline: 'The front room where the short version of you hangs up its coat.',
+    intro:
+      'Inside here, the summary sits by the fireplace and the hobby residents are milling around waiting to introduce themselves.',
+    hostMessage:
+      'This is where the fast overview of you lives, along with a few favorite interests dressed up as tiny stick people.',
+    stampLabel: 'Summary and side quests',
     variant: 'cottage',
     note: 'Meet the town storyteller',
-    placeholder: 'Placeholder for the bio, intro, and backstory.',
   },
   {
     id: 'experience',
     label: 'Experience',
+    title: 'Work Hall House',
+    tagline: 'A hallway full of chapters, teams, and past jobs with squeaky floorboards.',
+    intro:
+      'Each resident inside can stand in for a role you held, the work you owned, and the things that changed because you were there.',
+    hostMessage:
+      'Think of this one as the career hallway. Each stick resident handles a chapter of your work history.',
+    stampLabel: 'Roles and highlights',
     variant: 'gable',
     note: 'Take a look at the highlights',
-    placeholder: 'Placeholder for roles, highlights, and timeline.',
   },
   {
     id: 'resume',
     label: 'Resume',
+    title: 'Paperwork Parlor',
+    tagline: 'The one room in town where bureaucracy puts on a nice sweater.',
+    intro:
+      'This room holds a goofy downloadable resume courier and an on-page preview so nobody has to leave town to skim your details.',
+    hostMessage:
+      'The little courier by the door will hand over a download, and the paper spread in back can later swap over to a PDF.',
+    stampLabel: 'Download and preview',
     variant: 'gable',
     note: 'Grab the formal version',
-    placeholder: 'Placeholder for a downloadable resume and summary.',
-  },
-  {
-    id: 'portfolio',
-    label: 'Portfolio',
-    variant: 'cottage',
-    note: 'Work in progress',
-    placeholder: 'Placeholder for projects, case studies, and experiments.',
   },
 ]
 
@@ -50,6 +64,12 @@ const TREE_EXCLUSION_ZONES = [
   { left: 0.56, right: 0.86, top: 0.62, bottom: 0.94 },
   { left: 0.38, right: 0.62, top: 0.5, bottom: 0.82 },
 ]
+
+const PAGE_COMPONENTS = {
+  about: AboutPageContent,
+  experience: ExperiencePageContent,
+  resume: ResumePageContent,
+}
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
@@ -97,6 +117,15 @@ function generateTrees() {
   return trees
 }
 
+function resetMovement(keysRef) {
+  keysRef.current = {
+    up: false,
+    left: false,
+    down: false,
+    right: false,
+  }
+}
+
 function isEditableElement(target) {
   return (
     target instanceof HTMLElement &&
@@ -116,6 +145,7 @@ function isInteractiveElement(target) {
 
 function App() {
   const worldRef = useRef(null)
+  const closeButtonRef = useRef(null)
   const keysRef = useRef({
     up: false,
     left: false,
@@ -126,19 +156,25 @@ function App() {
   const nearbyHouseIdRef = useRef(null)
   const proximityFocusRef = useRef(null)
   const houseRefs = useRef(new Map())
+  const lastOpenedHouseRef = useRef(null)
+  const activeDestinationIdRef = useRef(null)
 
   const [trees] = useState(() => generateTrees())
   const [player, setPlayer] = useState(PLAYER_START)
   const [nearbyHouseId, setNearbyHouseId] = useState(null)
-  const [selectedHouseId, setSelectedHouseId] = useState(null)
+  const [activeDestinationId, setActiveDestinationId] = useState(null)
 
   const nearbyHouse =
-    HOUSE_DESTINATIONS.find((destination) => destination.id === nearbyHouseId) ??
-    null
-  const selectedHouse =
-    HOUSE_DESTINATIONS.find(
-      (destination) => destination.id === selectedHouseId,
-    ) ?? null
+    HOUSE_DESTINATIONS.find((destination) => destination.id === nearbyHouseId) ?? null
+  const activeDestination =
+    HOUSE_DESTINATIONS.find((destination) => destination.id === activeDestinationId) ?? null
+  const ActivePageComponent = activeDestination
+    ? PAGE_COMPONENTS[activeDestination.id]
+    : null
+
+  useEffect(() => {
+    activeDestinationIdRef.current = activeDestinationId
+  }, [activeDestinationId])
 
   function setHouseRef(id, node) {
     if (node) {
@@ -149,10 +185,52 @@ function App() {
     houseRefs.current.delete(id)
   }
 
-  function activateHouse(destination) {
-    setSelectedHouseId(destination.id)
-    houseRefs.current.get(destination.id)?.focus({ preventScroll: true })
+  function openHouse(destination) {
+    lastOpenedHouseRef.current = destination.id
+    setActiveDestinationId(destination.id)
   }
+
+  function closeHouse() {
+    setActiveDestinationId(null)
+  }
+
+  useEffect(() => {
+    if (activeDestinationId) {
+      resetMovement(keysRef)
+
+      if (playerRef.current.isWalking) {
+        const idlePlayer = {
+          ...playerRef.current,
+          isWalking: false,
+        }
+
+        playerRef.current = idlePlayer
+        setPlayer(idlePlayer)
+      }
+
+      if (proximityFocusRef.current) {
+        houseRefs.current.get(proximityFocusRef.current)?.blur()
+        proximityFocusRef.current = null
+      }
+
+      nearbyHouseIdRef.current = null
+      setNearbyHouseId(null)
+
+      window.requestAnimationFrame(() => {
+        closeButtonRef.current?.focus({ preventScroll: true })
+      })
+
+      return
+    }
+
+    if (lastOpenedHouseRef.current) {
+      window.requestAnimationFrame(() => {
+        houseRefs.current
+          .get(lastOpenedHouseRef.current)
+          ?.focus({ preventScroll: true })
+      })
+    }
+  }, [activeDestinationId])
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -162,8 +240,12 @@ function App() {
 
       const key = event.key.toLowerCase()
 
-      if (key === 'escape') {
-        setSelectedHouseId(null)
+      if (activeDestinationIdRef.current) {
+        if (key === 'escape') {
+          event.preventDefault()
+          closeHouse()
+        }
+
         return
       }
 
@@ -202,7 +284,7 @@ function App() {
 
         if (destination) {
           event.preventDefault()
-          activateHouse(destination)
+          openHouse(destination)
         }
       }
     }
@@ -227,23 +309,18 @@ function App() {
       }
     }
 
-    const resetMovement = () => {
-      keysRef.current = {
-        up: false,
-        left: false,
-        down: false,
-        right: false,
-      }
+    const handleBlur = () => {
+      resetMovement(keysRef)
     }
 
     window.addEventListener('keydown', handleKeyDown)
     window.addEventListener('keyup', handleKeyUp)
-    window.addEventListener('blur', resetMovement)
+    window.addEventListener('blur', handleBlur)
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('keyup', handleKeyUp)
-      window.removeEventListener('blur', resetMovement)
+      window.removeEventListener('blur', handleBlur)
     }
   }, [])
 
@@ -261,6 +338,12 @@ function App() {
 
       if (lastTimestamp === 0) {
         lastTimestamp = timestamp
+      }
+
+      if (activeDestinationIdRef.current) {
+        lastTimestamp = timestamp
+        frameId = window.requestAnimationFrame(step)
+        return
       }
 
       const worldRect = world.getBoundingClientRect()
@@ -378,15 +461,17 @@ function App() {
     }
   }, [])
 
-  const hudMessage = selectedHouse
-    ? `${selectedHouse.label}: ${selectedHouse.placeholder}`
-    : nearbyHouse
-      ? `Near ${nearbyHouse.label}. Press Space or Enter to open its placeholder.`
-      : 'Walk with WASD or click any house. Everything now lives on one page.'
+  const hudMessage = nearbyHouse
+    ? `Near ${nearbyHouse.label}. Press Space, Enter, or click to step inside.`
+    : 'Walk with WASD, click a house to visit, or use the little contact shops for a quick hello.'
 
   return (
-    <main className="town-shell">
-      <div className="town-world" ref={worldRef}>
+    <main className="town-shell" data-indoor={Boolean(activeDestinationId)}>
+      <div
+        ref={worldRef}
+        className={`town-world${activeDestinationId ? ' is-background' : ''}`}
+        inert={activeDestinationId ? true : undefined}
+      >
         <div className="town-forest" aria-hidden="true">
           {trees.map((tree) => (
             <div
@@ -410,18 +495,15 @@ function App() {
           <h1>Welcome to Danny Town</h1>
           <p className="town-tagline">Let&apos;s take a walk</p>
           <p className="town-directions">
-            Use <span>WASD</span> to walk the stickman, or click a house to open
-            its placeholder right here on the page.
+            Use <span>WASD</span> to walk the stickman, click a house to go inside, or
+            hop over to the contact shops for quick links.
           </p>
         </header>
 
-        <section
-          className="town-districts"
-          aria-label="Danny Town destinations"
-        >
+        <section className="town-districts" aria-label="Danny Town destinations">
           {HOUSE_DESTINATIONS.map((destination) => {
             const isNearby = nearbyHouseId === destination.id
-            const isSelected = selectedHouseId === destination.id
+            const isSelected = activeDestinationId === destination.id
 
             return (
               <button
@@ -431,7 +513,7 @@ function App() {
                 className={`district-house${isNearby ? ' is-nearby' : ''}${isSelected ? ' is-selected' : ''}`}
                 data-district={destination.id}
                 aria-pressed={isSelected}
-                onClick={() => activateHouse(destination)}
+                onClick={() => openHouse(destination)}
               >
                 <span className="district-label">{destination.label}</span>
                 <HouseSketch
@@ -443,14 +525,22 @@ function App() {
                 <span className="district-note">{destination.note}</span>
                 <span className="district-cta">
                   {isSelected
-                    ? 'Opened here'
+                    ? 'Inside now'
                     : isNearby
                       ? 'Press Space or Enter'
-                      : 'Click to open'}
+                      : 'Click to step inside'}
                 </span>
               </button>
             )
           })}
+        </section>
+
+        <section className="town-stores" aria-label="Contact storefronts">
+          <span className="town-stores__label">Contact Corner</span>
+          <span className="town-stores__note">
+            Tiny little houses for LinkedIn, email, and phone.
+          </span>
+          <ContactShops className="town-stores__cluster" />
         </section>
 
         <div
@@ -470,10 +560,22 @@ function App() {
           />
         </div>
 
-        <aside className="town-hud" aria-live="polite">
-          {hudMessage}
-        </aside>
+        {!activeDestinationId ? (
+          <aside className="town-hud" aria-live="polite">
+            {hudMessage}
+          </aside>
+        ) : null}
       </div>
+
+      {activeDestination && ActivePageComponent ? (
+        <HouseInteriorLayout
+          destination={activeDestination}
+          onClose={closeHouse}
+          closeButtonRef={closeButtonRef}
+        >
+          <ActivePageComponent />
+        </HouseInteriorLayout>
+      ) : null}
     </main>
   )
 }

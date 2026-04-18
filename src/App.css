@@ -1,4 +1,5 @@
 .town-shell {
+  position: relative;
   min-height: 100svh;
   padding: 0;
   overflow: hidden;
@@ -6,6 +7,12 @@
     radial-gradient(circle at top, rgba(255, 255, 255, 0.32), transparent 32%),
     linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%);
   color: var(--ink);
+}
+
+.town-shell[data-indoor='true'] {
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.24), transparent 28%),
+    linear-gradient(180deg, #ecd4b3 0%, #dcb891 100%);
 }
 
 .town-world {
@@ -19,6 +26,18 @@
     radial-gradient(circle at 78% 54%, rgba(255, 255, 255, 0.22), transparent 24%),
     linear-gradient(180deg, rgba(255, 247, 236, 0.92), rgba(245, 222, 196, 0.98));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+  transition:
+    transform 240ms ease,
+    opacity 240ms ease,
+    filter 240ms ease;
+}
+
+.town-world.is-background {
+  transform: scale(0.982);
+  opacity: 0.34;
+  filter: blur(4px) saturate(0.9);
+  pointer-events: none;
+  user-select: none;
 }
 
 .town-world::before,
@@ -103,7 +122,7 @@
 }
 
 .town-directions {
-  width: min(92%, 30ch);
+  width: min(92%, 34ch);
   margin: 0.5rem 0 0;
   font-size: clamp(1rem, 1.75vw, 1.42rem);
   line-height: 1.25;
@@ -160,11 +179,6 @@
 .district-house[data-district='resume'] {
   left: 34%;
   top: 78%;
-}
-
-.district-house[data-district='portfolio'] {
-  left: 68%;
-  top: 77%;
 }
 
 .district-house:hover,
@@ -237,6 +251,80 @@
   filter: drop-shadow(0 16px 18px rgba(43, 29, 18, 0.16));
 }
 
+.town-stores {
+  position: absolute;
+  left: 68%;
+  top: 77%;
+  z-index: 2;
+  display: flex;
+  width: clamp(14rem, 27vw, 27rem);
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  transform: translate(-50%, -50%);
+  color: var(--ink);
+  text-align: center;
+}
+
+.town-stores__label {
+  font-size: clamp(2.45rem, 4.6vw, 4.6rem);
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.town-stores__note {
+  max-width: 18ch;
+  font-size: clamp(0.72rem, 1vw, 1rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.town-stores__cluster {
+  width: 100%;
+}
+
+.town-stores__cluster .contact-shops__cluster {
+  gap: 0.7rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.town-stores__cluster .contact-shops__cluster::before {
+  inset: auto 4% 1.2rem;
+}
+
+.town-stores__cluster .contact-shop {
+  gap: 0.18rem;
+}
+
+.town-stores__cluster .contact-shop__house .scene-house {
+  --scene-size: clamp(72px, 6vw, 90px);
+}
+
+.town-stores__cluster .contact-shop__label {
+  max-width: 6.8ch;
+  min-height: 1.9em;
+  font-size: 0.98rem;
+}
+
+.town-stores__cluster .contact-shop__kind {
+  max-width: 10ch;
+  font-size: 0.54rem;
+  letter-spacing: 0.14em;
+}
+
+.town-stores__cluster .contact-shop__value {
+  max-width: 10ch;
+  font-size: 0.68rem;
+}
+
+.town-stores__cluster .contact-shop__action {
+  padding: 0.18rem 0.42rem;
+  font-size: 0.64rem;
+}
+
 .town-player {
   position: absolute;
   z-index: 3;
@@ -279,6 +367,282 @@
   backdrop-filter: blur(10px);
 }
 
+.interior-shell {
+  --room-accent: #95684b;
+  --room-paper: rgba(255, 248, 239, 0.96);
+  --room-paper-deep: rgba(245, 224, 197, 0.96);
+  --room-border: rgba(72, 48, 34, 0.2);
+
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+}
+
+.interior-shell[data-destination='about'] {
+  --room-accent: #9d6f4d;
+  --room-paper: rgba(255, 246, 238, 0.97);
+  --room-paper-deep: rgba(244, 224, 202, 0.98);
+}
+
+.interior-shell[data-destination='experience'] {
+  --room-accent: #6f7d61;
+  --room-paper: rgba(249, 244, 234, 0.97);
+  --room-paper-deep: rgba(228, 218, 197, 0.98);
+}
+
+.interior-shell[data-destination='resume'] {
+  --room-accent: #7d6353;
+  --room-paper: rgba(255, 247, 241, 0.97);
+  --room-paper-deep: rgba(239, 221, 204, 0.98);
+}
+
+.interior-shell__veil {
+  position: absolute;
+  inset: 0;
+  background: rgba(84, 61, 42, 0.16);
+  backdrop-filter: blur(7px);
+}
+
+.interior-shell__scroll {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  overflow-y: auto;
+  padding: clamp(0.85rem, 2.6vw, 1.8rem);
+}
+
+.interior-shell__frame {
+  position: relative;
+  width: min(1120px, 100%);
+  min-height: 100%;
+  margin: 0 auto;
+  border: 2px solid var(--room-border);
+  border-radius: 36px 36px 20px 20px;
+  background: linear-gradient(180deg, var(--room-paper), var(--room-paper-deep));
+  padding: clamp(1.1rem, 2.6vw, 1.9rem) clamp(1rem, 3vw, 2.2rem)
+    clamp(4.8rem, 15vw, 7rem);
+  box-shadow:
+    0 28px 44px rgba(43, 29, 18, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  overflow: hidden;
+}
+
+.interior-shell__frame::before,
+.interior-shell__frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.interior-shell__frame::before {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18) 0 2px, transparent 2px 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 24%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.04) 0 46px,
+      rgba(125, 94, 67, 0.04) 46px 92px
+    );
+  opacity: 0.75;
+}
+
+.interior-shell__frame::after {
+  inset: auto 0 0;
+  height: clamp(5.8rem, 18vw, 8.2rem);
+  border-top: 2px solid rgba(90, 63, 44, 0.18);
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(158, 120, 86, 0.34) 0 54px,
+      rgba(148, 111, 79, 0.42) 54px 108px
+    ),
+    linear-gradient(180deg, rgba(180, 136, 96, 0.24), rgba(126, 91, 62, 0.28));
+}
+
+.interior-shell__rafters {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3.25rem;
+  border-bottom: 2px solid rgba(87, 60, 40, 0.18);
+  background: linear-gradient(180deg, rgba(145, 108, 76, 0.36), rgba(115, 82, 55, 0.28));
+}
+
+.interior-shell__window {
+  position: absolute;
+  top: clamp(1.45rem, 4vw, 2rem);
+  width: clamp(88px, 10vw, 138px);
+  height: clamp(132px, 16vw, 198px);
+  border: 2px solid rgba(84, 60, 41, 0.18);
+  border-radius: 999px 999px 22px 22px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent calc(50% - 1px),
+      rgba(100, 74, 53, 0.14) calc(50% - 1px),
+      rgba(100, 74, 53, 0.14) calc(50% + 1px),
+      transparent calc(50% + 1px)
+    ),
+    linear-gradient(
+      180deg,
+      transparent calc(50% - 1px),
+      rgba(100, 74, 53, 0.14) calc(50% - 1px),
+      rgba(100, 74, 53, 0.14) calc(50% + 1px),
+      transparent calc(50% + 1px)
+    ),
+    linear-gradient(180deg, rgba(248, 252, 255, 0.9), rgba(210, 230, 242, 0.9));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 10px 24px rgba(43, 29, 18, 0.08);
+  opacity: 0.86;
+}
+
+.interior-shell__window--left {
+  left: clamp(1rem, 3vw, 1.8rem);
+}
+
+.interior-shell__window--right {
+  right: clamp(1rem, 3vw, 1.8rem);
+}
+
+.interior-shell__header {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem 1.3rem;
+  margin-top: clamp(2.7rem, 7vw, 4.3rem);
+}
+
+.interior-shell__back {
+  grid-column: 1 / -1;
+  justify-self: start;
+  border: 1.5px solid rgba(43, 29, 18, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 252, 247, 0.84);
+  padding: 0.4rem 0.9rem;
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+.interior-shell__back:hover,
+.interior-shell__back:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px rgba(43, 29, 18, 0.1);
+}
+
+.interior-shell__back:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.65);
+  outline-offset: 3px;
+}
+
+.interior-shell__heading h2 {
+  margin: 0.08em 0 0;
+  font-size: clamp(3rem, 5vw, 4.8rem);
+  line-height: 0.88;
+  letter-spacing: -0.05em;
+}
+
+.interior-shell__eyebrow {
+  margin: 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--room-accent) 68%, var(--ink) 32%);
+}
+
+.interior-shell__tagline {
+  margin: 0.1rem 0 0;
+  font-family: var(--font-script);
+  font-size: clamp(1.9rem, 3.5vw, 3rem);
+  line-height: 0.94;
+  color: var(--ink-muted);
+}
+
+.interior-shell__intro {
+  width: min(58ch, 100%);
+  margin: 0.45rem 0 0;
+  font-size: clamp(1rem, 1.55vw, 1.2rem);
+  line-height: 1.32;
+  color: var(--ink-soft);
+}
+
+.interior-shell__stamp {
+  justify-self: end;
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  align-self: start;
+  color: color-mix(in srgb, var(--room-accent) 70%, var(--ink) 30%);
+  text-align: center;
+}
+
+.interior-shell__stamp span {
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.interior-shell__host {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: min(38rem, 100%);
+  margin-top: 1.1rem;
+  border: 1.5px solid rgba(43, 29, 18, 0.14);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(255, 248, 238, 0.84));
+  padding: 0.9rem 1rem;
+  box-shadow: 0 14px 24px rgba(43, 29, 18, 0.08);
+  transform: rotate(-0.8deg);
+}
+
+.interior-shell__host-copy {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.interior-shell__host-copy p {
+  margin: 0;
+}
+
+.interior-shell__host-label {
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--room-accent) 68%, var(--ink) 32%);
+}
+
+.interior-shell__body {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.2rem;
+}
+
+.interior-shell__footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.6rem 1rem;
+  margin-top: 1.25rem;
+  padding-top: 0.9rem;
+  border-top: 1px dashed rgba(43, 29, 18, 0.16);
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
 @keyframes tree-sway {
   0%,
   100% {
@@ -319,9 +683,26 @@
     top: 79%;
   }
 
-  .district-house[data-district='portfolio'] {
+  .town-stores {
     left: 68%;
     top: 78%;
+    width: clamp(12rem, 34vw, 18rem);
+  }
+
+  .town-stores__cluster .contact-shops__cluster {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .town-stores__cluster .contact-shop {
+    transform: translateY(var(--shop-nudge)) rotate(var(--shop-tilt));
+  }
+
+  .interior-shell__header {
+    grid-template-columns: 1fr;
+  }
+
+  .interior-shell__stamp {
+    justify-self: start;
   }
 }
 
@@ -369,16 +750,13 @@
     top: 81%;
   }
 
-  .district-house[data-district='portfolio'] {
-    left: 69%;
-    top: 80%;
-  }
-
-  .district-label {
+  .district-label,
+  .town-stores__label {
     font-size: clamp(2.1rem, 8vw, 3.2rem);
   }
 
-  .district-note {
+  .district-note,
+  .town-stores__note {
     max-width: 14ch;
     font-size: 0.64rem;
     letter-spacing: 0.12em;
@@ -388,10 +766,67 @@
     font-size: 0.74rem;
   }
 
+  .town-stores {
+    left: 69%;
+    top: 80%;
+    width: clamp(8.6rem, 33vw, 11rem);
+    gap: 0.25rem;
+  }
+
+  .town-stores__cluster .contact-shops__cluster {
+    grid-template-columns: 1fr;
+  }
+
+  .town-stores__cluster .contact-shop__house .scene-house {
+    --scene-size: 66px;
+  }
+
+  .town-stores__cluster .contact-shop__label {
+    font-size: 0.82rem;
+  }
+
+  .town-stores__cluster .contact-shop__value,
+  .town-stores__cluster .contact-shop__action {
+    font-size: 0.68rem;
+  }
+
   .town-hud {
     width: min(92%, 30rem);
     padding: 0.72rem 0.95rem;
     font-size: 0.92rem;
+  }
+
+  .interior-shell__scroll {
+    padding: 0.7rem;
+  }
+
+  .interior-shell__frame {
+    border-radius: 26px 26px 18px 18px;
+    padding: 1rem 0.9rem 4.6rem;
+  }
+
+  .interior-shell__window {
+    width: 76px;
+    height: 118px;
+    opacity: 0.56;
+  }
+
+  .interior-shell__heading h2 {
+    font-size: clamp(2.3rem, 10vw, 3.2rem);
+  }
+
+  .interior-shell__tagline {
+    font-size: clamp(1.55rem, 7vw, 2rem);
+  }
+
+  .interior-shell__host {
+    flex-direction: column;
+    align-items: start;
+    transform: none;
+  }
+
+  .interior-shell__footer {
+    flex-direction: column;
   }
 }
 
@@ -399,7 +834,10 @@
   .tree-spot,
   .district-house,
   .district-house .scene-house,
-  .district-cta {
+  .district-cta,
+  .town-world,
+  .interior-shell__back,
+  .town-stores__cluster .contact-shop {
     animation: none;
     transition: none;
   }

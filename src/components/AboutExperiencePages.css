@@ -1,0 +1,463 @@
+.house-page {
+  --house-accent: #8b5b3c;
+  --house-accent-soft: rgba(139, 91, 60, 0.12);
+  --house-room-bg: rgba(255, 251, 245, 0.78);
+  --house-border: rgba(43, 29, 18, 0.15);
+
+  position: relative;
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.6rem);
+  width: min(100%, 68rem);
+  padding: clamp(1.2rem, 2vw, 2rem);
+  border: 1.5px solid var(--house-border);
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.45), transparent 28%),
+    linear-gradient(180deg, rgba(255, 249, 242, 0.94), rgba(245, 230, 214, 0.95));
+  box-shadow:
+    0 18px 34px rgba(43, 29, 18, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.house-page::before,
+.house-page::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+
+.house-page::before {
+  inset: 0;
+  background:
+    linear-gradient(125deg, transparent 0 14%, rgba(255, 255, 255, 0.16) 18%, transparent 24%),
+    radial-gradient(circle at 90% 14%, var(--house-accent-soft), transparent 16%);
+}
+
+.house-page::after {
+  right: 2rem;
+  bottom: -2.8rem;
+  width: 12rem;
+  height: 5rem;
+  border-radius: 999px;
+  background: rgba(120, 88, 58, 0.1);
+  filter: blur(22px);
+}
+
+.house-page--about {
+  --house-accent: #9f6c49;
+  --house-accent-soft: rgba(159, 108, 73, 0.16);
+}
+
+.house-page--experience {
+  --house-accent: #6f7a5e;
+  --house-accent-soft: rgba(111, 122, 94, 0.16);
+}
+
+.house-page__header {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.house-page__eyebrow {
+  margin: 0;
+  font-size: 0.88rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--house-accent) 70%, var(--ink) 30%);
+}
+
+.house-page__title {
+  margin: 0;
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.house-page__subtitle {
+  max-width: 34rem;
+  margin: 0;
+  font-family: var(--font-script);
+  font-size: clamp(1.45rem, 2.8vw, 2.15rem);
+  line-height: 0.95;
+  color: var(--ink-soft);
+}
+
+.house-page__doodle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.15rem;
+}
+
+.house-page__doodle span {
+  display: block;
+  height: 0;
+  border-top: 2px solid rgba(43, 29, 18, 0.44);
+}
+
+.house-page__doodle span:nth-child(1) {
+  width: 2.2rem;
+  transform: rotate(-4deg);
+}
+
+.house-page__doodle span:nth-child(2) {
+  width: 1rem;
+  transform: rotate(5deg);
+}
+
+.house-page__doodle span:nth-child(3) {
+  width: 3rem;
+  transform: rotate(-2deg);
+}
+
+.house-page__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.4rem);
+}
+
+.house-page__grid--about,
+.house-page__grid--experience {
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.2fr);
+}
+
+.house-room {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: clamp(1rem, 1.8vw, 1.35rem);
+  border: 1.5px solid rgba(43, 29, 18, 0.12);
+  border-radius: 24px;
+  background: var(--house-room-bg);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 10px 20px rgba(43, 29, 18, 0.06);
+}
+
+.house-room::before {
+  content: '';
+  position: absolute;
+  inset: 0.65rem;
+  border: 1px dashed rgba(43, 29, 18, 0.12);
+  border-radius: 18px;
+  pointer-events: none;
+}
+
+.house-room--summary {
+  transform: rotate(-1deg);
+}
+
+.house-room--intro {
+  transform: rotate(-0.85deg);
+}
+
+.house-room--residents {
+  transform: rotate(0.7deg);
+}
+
+.house-room__label {
+  position: relative;
+  z-index: 1;
+  width: fit-content;
+  margin: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+  padding: 0.18rem 0.72rem;
+  font-size: 0.84rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--house-accent) 72%, var(--ink) 28%);
+}
+
+.house-room__title {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: clamp(1.5rem, 2.3vw, 2.1rem);
+  line-height: 0.95;
+}
+
+.house-summary {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.house-summary p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.34;
+}
+
+.house-summary__mini-notes {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.house-summary__mini-notes span,
+.experience-notes li,
+.resident-detail__snippets li,
+.resident-button__badge {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 0.22rem 0.62rem;
+  box-shadow: 0 3px 8px rgba(43, 29, 18, 0.05);
+}
+
+.house-summary__mini-notes span {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.experience-notes {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.experience-notes li {
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+
+.resident-room__heading {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.resident-room__hint,
+.resident-room__empty {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.96rem;
+  line-height: 1.3;
+}
+
+.resident-room__layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 1.05fr);
+  align-items: start;
+}
+
+.resident-room__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.2rem, 1fr));
+  gap: 0.85rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.resident-room__item {
+  min-width: 0;
+}
+
+.resident-button {
+  --resident-lift: 0px;
+
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  width: 100%;
+  min-height: 12.5rem;
+  border: 1.5px solid rgba(43, 29, 18, 0.12);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.32), transparent 54%),
+    linear-gradient(180deg, rgba(255, 251, 246, 0.9), rgba(246, 233, 218, 0.92));
+  padding: 0.8rem 0.7rem 0.95rem;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: center;
+  transform: translateY(var(--resident-lift)) rotate(-0.8deg);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.resident-button[data-figure-index='1'] {
+  transform: translateY(var(--resident-lift)) rotate(0.95deg);
+}
+
+.resident-button[data-figure-index='2'] {
+  transform: translateY(var(--resident-lift)) rotate(-1.2deg);
+}
+
+.resident-button[data-figure-index='3'] {
+  transform: translateY(var(--resident-lift)) rotate(0.55deg);
+}
+
+.resident-button:hover,
+.resident-button:focus-visible,
+.resident-button[data-active='true'] {
+  --resident-lift: -5px;
+
+  border-color: rgba(43, 29, 18, 0.24);
+  box-shadow: 0 14px 24px rgba(43, 29, 18, 0.12);
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.48), transparent 54%),
+    linear-gradient(180deg, rgba(255, 253, 249, 0.96), rgba(247, 236, 222, 0.96));
+}
+
+.resident-button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--house-accent) 45%, white 55%);
+  outline-offset: 2px;
+}
+
+.resident-button__figure {
+  display: inline-flex;
+  align-items: end;
+  justify-content: center;
+  min-height: 6.2rem;
+}
+
+.resident-button__name {
+  font-size: 1.12rem;
+  line-height: 1;
+}
+
+.resident-button__badge {
+  font-size: 0.8rem;
+  line-height: 1.1;
+  color: var(--ink-soft);
+}
+
+.resident-detail {
+  position: relative;
+  min-height: 100%;
+  padding: 1rem 1rem 1.1rem;
+  border: 1.5px solid rgba(43, 29, 18, 0.14);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(252, 242, 231, 0.92));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 8px 20px rgba(43, 29, 18, 0.08);
+}
+
+.resident-detail::before {
+  content: '';
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  width: 3.3rem;
+  height: 0.9rem;
+  border-radius: 999px;
+  background: rgba(207, 182, 155, 0.45);
+  transform: rotate(5deg);
+}
+
+.resident-detail__eyebrow,
+.resident-detail__timeframe {
+  margin: 0;
+  font-size: 0.88rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--house-accent) 70%, var(--ink) 30%);
+}
+
+.resident-detail__title {
+  margin: 0.25rem 0 0;
+  font-size: clamp(1.25rem, 2vw, 1.7rem);
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.resident-detail__timeframe {
+  margin-top: 0.4rem;
+}
+
+.resident-detail__body {
+  margin: 0.75rem 0 0;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1.34;
+}
+
+.resident-detail__snippets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0.9rem 0 0;
+  list-style: none;
+}
+
+.resident-detail__snippets li {
+  font-size: 0.88rem;
+  color: var(--ink);
+}
+
+@media (max-width: 900px) {
+  .house-page__grid--about,
+  .house-page__grid--experience,
+  .resident-room__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .resident-room__list {
+    grid-template-columns: repeat(auto-fit, minmax(7.6rem, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .house-page {
+    padding: 1rem;
+    border-radius: 24px;
+  }
+
+  .house-page__title {
+    font-size: clamp(1.9rem, 9vw, 2.7rem);
+  }
+
+  .house-page__subtitle {
+    font-size: clamp(1.2rem, 6.4vw, 1.65rem);
+  }
+
+  .house-room {
+    padding: 0.9rem;
+    border-radius: 20px;
+    transform: none;
+  }
+
+  .resident-room__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .resident-button {
+    min-height: 11.2rem;
+    padding-inline: 0.55rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resident-button {
+    transition: none;
+  }
+}
